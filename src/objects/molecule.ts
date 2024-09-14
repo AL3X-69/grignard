@@ -1,4 +1,4 @@
-import {SimpleNode} from "./nodes.ts";
+import {SimpleNode} from "./nodes";
 
 export class Molecule {
     atoms: SimpleNode[] = [];

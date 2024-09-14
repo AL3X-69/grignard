@@ -1,12 +1,12 @@
-import {SimpleNode} from "./nodes.ts";
-import {fabric} from "fabric";
+import {SimpleNode} from "./nodes";
+import {FabricText} from "fabric";
 
 export type BondType = "simple" | "double" | "triple";
 
 export abstract class Bond {
     nodeA: SimpleNode;
     nodeB: SimpleNode;
-    _object: fabric.Text | undefined;
+    _object: FabricText | undefined;
 
     protected constructor(nodeA: SimpleNode, nodeB: SimpleNode) {
         this.nodeA = nodeA;

@@ -1,11 +1,11 @@
-import {Bond, BondType, SimpleBond} from "./bonds.ts";
-import valence from "../chem/valence.ts";
-import {fabric} from "fabric";
+import {Bond, BondType, SimpleBond} from "./bonds";
+import valence from "../chem/valence";
+import {FabricText} from "fabric";
 
 export class SimpleNode {
     atom: string;
     charge: number = 0;
-    _object: fabric.Text | undefined;
+    _object: FabricText | undefined;
     private _links: Bond[] = [];
 
     constructor(atom: string) {

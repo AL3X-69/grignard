@@ -1,8 +1,7 @@
-import {Molecule} from "../objects/molecule.ts";
-import {SimpleNode} from "../objects/nodes.ts";
-import {fabric} from "fabric";
-import {Bond} from "../objects/bonds.ts";
-import {StaticCanvas} from "fabric/fabric-impl";
+import {Molecule} from "../objects/molecule";
+import {SimpleNode} from "../objects/nodes";
+import {Bond} from "../objects/bonds";
+import {Canvas as FabricCanvas, FabricText} from "fabric";
 
 export interface SchemaOptions {
     geometry?: "flat" | "fischer" | "cram" | "haworth" | "newman",
@@ -54,10 +53,10 @@ const getBiggerCarbonChain = (bond: Bond | null, node: SimpleNode): {length: num
 }
 
 export default class Canvas {
-    canvas: StaticCanvas;
+    canvas: FabricCanvas;
 
     constructor(canvas: HTMLCanvasElement) {
-        this.canvas = new fabric.StaticCanvas(canvas);
+        this.canvas = new FabricCanvas(canvas);
     }
 
     private drawNode(node: SimpleNode, options: SchemaOptions, depth: number,
@@ -76,7 +75,7 @@ export default class Canvas {
             let s = node.atom;
             // TODO: Hydrogen number as indice
             if (options.showHydrogenAtoms === "compact") s += "H" + countHydrogen(node)
-            const text = new fabric.Text(s);
+            const text = new FabricText(s);
             node._object = text;
             this.canvas.add(text);
         }
@@ -92,6 +91,6 @@ export default class Canvas {
     }
 
     draw = (molecule: Molecule, options?: SchemaOptions) => {
-        this.drawNode(molecule.atoms[0], options || {}, 0, 0, true);
+        this.drawNode(molecule.atoms[0], options || {}, 0, 0, true, null);
     }
 }
