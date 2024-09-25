@@ -1,6 +1,6 @@
-import {Molecule} from "../objects/molecule.ts";
-import {SimpleNode} from "../objects/nodes.ts";
-import {BondType} from "../objects/bonds.ts";
+import {Molecule} from "../objects/molecule";
+import {SimpleNode} from "../objects/nodes";
+import {BondType} from "../objects/bonds";
 
 const STANDARD_ATOMS = ["B", "C", "N", "O", "P", "S", "F", "Cl", "Br", "I"];
 

@@ -1,11 +1,14 @@
-const canvas = document.getElementById("main-canvas");
+import Canvas from "grignard/graphics/canvas";
+import {SMILESParser} from "grignard/parsers/smiles";
 
-if (canvas instanceof HTMLCanvasElement) {
-    const ctx = canvas.getContext("2d");
+const canvasEl = document.getElementById("main-canvas");
+const input = document.getElementById("smiles-input");
+const canvas = new Canvas(canvasEl);
+const parser = new SMILESParser();
 
-
-
-} else console.error("Provided canvas is not a canvas");
+input.on("input", () => {
+    canvas.draw(parser.parse(input.value));
+})
 
 
 

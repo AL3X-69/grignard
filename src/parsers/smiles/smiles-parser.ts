@@ -1,4 +1,4 @@
-import {Token} from "../parsers.ts";
+import {Token} from "../parsers";
 
 const SMILES_CHARACTERS = {
     ATOM_DATA_BEGIN: "[",
