@@ -1,14 +1,14 @@
-import Canvas from "grignard/graphics/canvas";
-import {SMILESParser} from "grignard/parsers/smiles";
+import {Canvas, SMILESParser} from "grignard";
 
 const canvasEl = document.getElementById("main-canvas");
 const input = document.getElementById("smiles-input");
+
+if (canvasEl == null || !(canvasEl instanceof HTMLCanvasElement)) throw new Error("invalid canvas");
+if (input == null || !(input instanceof HTMLInputElement)) throw new Error("invalid input");
+
 const canvas = new Canvas(canvasEl);
 const parser = new SMILESParser();
 
-input.on("input", () => {
+input.addEventListener("input", () => {
     canvas.draw(parser.parse(input.value));
-})
-
-
-
+});

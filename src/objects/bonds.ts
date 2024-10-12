@@ -1,12 +1,13 @@
 import {SimpleNode} from "./nodes";
-import {FabricText} from "fabric";
+import {Line} from "fabric/fabric-impl";
 
 export type BondType = "simple" | "double" | "triple";
 
 export abstract class Bond {
     nodeA: SimpleNode;
     nodeB: SimpleNode;
-    _object: FabricText | undefined;
+    _object: Line | undefined;
+    _angle: number | undefined;
 
     protected constructor(nodeA: SimpleNode, nodeB: SimpleNode) {
         this.nodeA = nodeA;

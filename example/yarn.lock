@@ -1013,11 +1013,10 @@ __metadata:
 
 "grignard@file:..::locator=example%40workspace%3A.":
   version: 1.0.0
-  resolution: "grignard@file:..#..::hash=804986&locator=example%40workspace%3A."
+  resolution: "grignard@file:..#..::hash=b41e58&locator=example%40workspace%3A."
   dependencies:
     fabric: "npm:^6.4.1"
-    on-change: "npm:^5.0.1"
-  checksum: 10c0/035e2c9311ddcf35eb4d42486a254000cbb20bd899be99d32bc2c0d1269761c141307850f3cb8c86935cd8499e20b9af819773d469c3e1dee7679aa650ce99ec
+  checksum: 10c0/15a30d93254703aa8978e53509147c28a48b367de19ca16ceee1260c8f756fc70b5d1b64782d9069c3d7e374e3cf7e5c0d7347ccf366a5dd721ff6d187ca3403
   languageName: node
   linkType: hard
 
@@ -1510,13 +1509,6 @@ __metadata:
   version: 4.1.1
   resolution: "object-assign@npm:4.1.1"
   checksum: 10c0/1f4df9945120325d041ccf7b86f31e8bcc14e73d29171e37a7903050e96b81323784ec59f93f102ec635bcf6fa8034ba3ea0a8c7e69fa202b87ae3b6cec5a414
-  languageName: node
-  linkType: hard
-
-"on-change@npm:^5.0.1":
-  version: 5.0.1
-  resolution: "on-change@npm:5.0.1"
-  checksum: 10c0/3be9929f45af820288ff3c104290e8bf6346889a51f7b0ccb6eb20802e5b84e34917811a5f267c3fa94729061be99c7aeb99036d1ce6099c673551e8beb04d0a
   languageName: node
   linkType: hard
 

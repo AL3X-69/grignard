@@ -1,11 +1,12 @@
 import {Bond, BondType, SimpleBond} from "./bonds";
-import valence from "../chem/valence";
 import {FabricText} from "fabric";
+import {Coordinates} from "../graphics/geometry";
 
 export class SimpleNode {
     atom: string;
     charge: number = 0;
     _object: FabricText | undefined;
+    _position: Coordinates | undefined;
     private _links: Bond[] = [];
 
     constructor(atom: string) {
