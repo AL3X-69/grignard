@@ -59,44 +59,37 @@ const processGroup = (s: string, main: boolean): GroupProcessingResult => {
 
             i += c === "%" ? n.toString().length : 0;
         } else if (c === "[") { // Reading non-organic atom
-            // TODO: ignore isotopic notation
             const end = s.indexOf("]", i + 1);
             if (end === -1)
                 throw new Error("Error while parsing SMILES: Expected closing ] but none have been found");
             const element = s.substring(i + 1, end);
-            let name = element[0];
-            if (isNaN(Number(element[1])) && element[1] === element[1].toLowerCase()) name += element[1];
+            let name = element.replace(/[^A-GI-Za-z]+/g, "");
+            let [isotope, tailInfo] = s.split(/[A-GI-Za-z]+/);
 
-            // find if element has a non-standard charge
-            const chStart = Math.max(element.indexOf("+"), element.indexOf("-"));
-            const sign = element.indexOf("-") > 0 ? -1 : 1;
-            let charge = chStart > 0 ? sign : 0;
-            if (chStart > 0 && chStart < element.length - 1) {
-                // check if the charge use the +++ notation or the +3 notation
-                if (!isNaN(Number(element[chStart + 1]))) {
-                    charge = Number(element.substring(chStart + 1, element.length)) * sign;
-                } else {
-                    charge = (element.split(sign == 1 ? "+" : "-").length - 1) * sign;
-                }
+            if (name === "" && tailInfo.startsWith("H")) {
+                name = "H";
+                tailInfo = tailInfo.substring(1);
             }
 
-            // find if element has hydrogen atoms attached
-            let hn = 0;
-            if (element[name.length] === "H") {
-                hn = 1;
-                if (!isNaN(Number(element[name.length + 1]))) {
-                    let hEnd = chStart === -1 ? element.length - 1 : chStart;
-                    if (hEnd === -1) hEnd = element.length - 1;
-                    hn = Number(element.substring(name.length, hEnd));
-                }
-            }
+            if (tailInfo.indexOf("+") > 0 && tailInfo.indexOf("-") > 0) throw new Error("Error while parsing SMILES: Both a positive and negative charge are specified for non-normal atom");
+
+            let hydrogen = null;
+            const chStart = Math.max(tailInfo.indexOf("+"), tailInfo.indexOf("-"));
+            if (tailInfo.startsWith("H")) hydrogen = chStart === 1 ? 1 : Number(s.substring(1).replace(/[+-].+$)/, ""));
+            else if (tailInfo.indexOf("H") > 0) throw new Error("Error while parsing SMILES: Hydrogen at wrong position in non-normal atom");
+
+            const chargeInfo = tailInfo.substring(chStart);
+            const q = chargeInfo[0] === "+" ? 1 : -1;
+            const signAmount = chargeInfo.split(chargeInfo[0]).length - 1;
+            const charge = q * (signAmount > 1 ? signAmount : Number(chargeInfo.substring(1)));
 
             let _a = atom;
             atom = new SimpleNode(name);
             atom.charge = charge;
             atom.main = main;
-            atom.addHydrogen(hn);
+            if (hydrogen) atom.addHydrogen(hydrogen);
             if (_a !== null) _a.connectTo(atom, bondType);
+            // TODO: save isotope
             else parentBond = bondType;
             atoms.push(atom);
 
