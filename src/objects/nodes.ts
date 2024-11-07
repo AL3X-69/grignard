@@ -5,6 +5,7 @@ import {Coordinates} from "../graphics/geometry";
 export class SimpleNode {
     atom: string;
     charge: number = 0;
+    main: boolean = false;
     _object: FabricText | undefined;
     _position: Coordinates | undefined;
     private _links: Bond[] = [];

@@ -32,7 +32,7 @@ const readNumber = (s: string, start: number): number => {
 }
 
 // TODO: Support chirality (3.3.2-3.3.4)
-const processGroup = (s: string): GroupProcessingResult => {
+const processGroup = (s: string, main: boolean): GroupProcessingResult => {
     const atoms = [];
     const cycles: {[index: number]: SimpleNode} = {};
     let atom = null;
@@ -46,7 +46,7 @@ const processGroup = (s: string): GroupProcessingResult => {
             if (atom === null) throw new Error(
                 "Error while parsing SMILES: Unexpected group, at least one atom is required before opening a branch");
             let closingParenthesis = findClosingParenthesis(s, i);
-            const r = processGroup(s.substring(i + 1, closingParenthesis));
+            const r = processGroup(s.substring(i + 1, closingParenthesis), false);
             atom.connectTo(r.atoms[0], r.parentBondType);
             i = closingParenthesis;
         } else if (!isNaN(Number(c)) || c === "%") { // Reading cycle number
@@ -94,6 +94,7 @@ const processGroup = (s: string): GroupProcessingResult => {
             let _a = atom;
             atom = new SimpleNode(name);
             atom.charge = charge;
+            atom.main = main;
             atom.addHydrogen(hn);
             if (_a !== null) _a.connectTo(atom, bondType);
             else parentBond = bondType;
@@ -108,6 +109,7 @@ const processGroup = (s: string): GroupProcessingResult => {
 
             let _a = atom;
             atom = new SimpleNode(name);
+            atom.main = main;
             // TODO: auto hydrogen add (see SMILES reference)
             if (_a !== null) _a.connectTo(atom, bondType);
             else parentBond = bondType;
@@ -128,7 +130,7 @@ const processGroup = (s: string): GroupProcessingResult => {
 
 export class SMILESParser {
     parse(s: string): Molecule {
-        const r = processGroup(s);
+        const r = processGroup(s, true);
         return new Molecule(r.atoms);
     }
 }

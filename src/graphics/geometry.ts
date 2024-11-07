@@ -13,3 +13,8 @@ export const getNextPoint = (point: OrientedCoordinates, distance: number): Coor
         y: point.y + distance * Math.sin(point.angle),
     }
 }
+
+export const add = (c1: Coordinates, c2: Coordinates): Coordinates => ({
+    x: c1.x + c2.x,
+    y: c1.y + c2.y
+});
