@@ -4,15 +4,19 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4b1d1cb7-54aa-46be-bf47-f8d7a0d6e370" name="Changes" comment="Update gitignore for yarn">
-      <change afterPath="$PROJECT_DIR$/src/graphics/geometry.ts" afterDir="false" />
+    <list default="true" id="4b1d1cb7-54aa-46be-bf47-f8d7a0d6e370" name="Changes" comment="Started drawing implementation">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/example/.yarn/install-state.gz" beforeDir="false" afterPath="$PROJECT_DIR$/example/.yarn/install-state.gz" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/example/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/example/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/example/src/main.ts" beforeDir="false" afterPath="$PROJECT_DIR$/example/src/main.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/example/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/example/yarn.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/graphics/canvas.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphics/canvas.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/objects/bonds.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/objects/bonds.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/graphics/geometry.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphics/geometry.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/objects/nodes.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/objects/nodes.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/parsers/parsers.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/parsers/parsers.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/parsers/smiles.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/parsers/smiles.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -29,6 +33,18 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;AL3X-69&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/AL3X-69/grignard.git&quot;,
+    &quot;accountId&quot;: &quot;0235f4fe-777f-49fb-bc19-09f58e698ad5&quot;
+  }
+}</component>
   <component name="MacroExpansionManager">
     <option name="directoryName" value="4oxn9yro" />
   </component>
@@ -46,6 +62,7 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Node.js.canvas.ts.executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "dart.analysis.tool.window.visible": "false",
@@ -56,12 +73,38 @@
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "yarn",
+    "npm.dev.executor": "Run",
     "org.rust.first.attach.projects.stats": "true",
     "show.migrate.to.gradle.popup": "false",
     "ts.external.directory.path": "C:\\Users\\alex6\\IdeaProjects\\grignard\\node_modules\\typescript\\lib",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
+  <component name="RunManager">
+    <configuration name="dev" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/example/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="dev" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="npm.dev" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-28b599e66164-intellij.indexing.shared.core-IU-242.23726.103" />
+        <option value="bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-IU-242.23726.103" />
+      </set>
+    </attachedChunks>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -73,6 +116,10 @@
       <workItem from="1710502123637" duration="5235000" />
       <workItem from="1710894445353" duration="1730000" />
       <workItem from="1711710295455" duration="506000" />
+      <workItem from="1728724645210" duration="91000" />
+      <workItem from="1729521152799" duration="28000" />
+      <workItem from="1730582355069" duration="10770000" />
+      <workItem from="1730937393490" duration="1344000" />
     </task>
     <task id="LOCAL-00001" summary="Update gitignore for yarn">
       <option name="closed" value="true" />
@@ -82,14 +129,34 @@
       <option name="project" value="LOCAL" />
       <updated>1727298687772</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Started drawing implementation">
+      <option name="closed" value="true" />
+      <created>1728724726166</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1728724726166</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Update gitignore for yarn" />
-    <option name="LAST_COMMIT_MESSAGE" value="Update gitignore for yarn" />
+    <MESSAGE value="Started drawing implementation" />
+    <option name="LAST_COMMIT_MESSAGE" value="Started drawing implementation" />
   </component>
 </project>

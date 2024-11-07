@@ -1,4 +1,4 @@
-import {Canvas, SMILESParser} from "grignard";
+import {SMILESParser, Canvas} from "../../src";
 
 const canvasEl = document.getElementById("main-canvas");
 const input = document.getElementById("smiles-input");
@@ -10,5 +10,6 @@ const canvas = new Canvas(canvasEl);
 const parser = new SMILESParser();
 
 input.addEventListener("input", () => {
+    console.log("input");
     canvas.draw(parser.parse(input.value));
 });
