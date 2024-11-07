@@ -32,9 +32,11 @@ const readNumber = (s: string, start: number): number => {
 }
 
 // TODO: Support chirality (3.3.2-3.3.4)
+// TODO: Support aromatic rings
 const processGroup = (s: string, main: boolean): GroupProcessingResult => {
     const atoms = [];
-    const cycles: {[index: number]: SimpleNode} = {};
+    const cycles: {[index: number]: SimpleNode[]} = {};
+    let currentCycle: number | null = null;
     let atom = null;
     let bondType: BondType = "simple";
     let parentBond: BondType = "simple";
@@ -43,8 +45,8 @@ const processGroup = (s: string, main: boolean): GroupProcessingResult => {
         const c = s.charAt(i);
 
         if (c === "(") { // Reading group (recursive call)
-            if (atom === null) throw new Error(
-                "Error while parsing SMILES: Unexpected group, at least one atom is required before opening a branch");
+            if (atom === null)
+                throw new Error("Unexpected group, at least one atom is required before opening a branch");
             let closingParenthesis = findClosingParenthesis(s, i);
             const r = processGroup(s.substring(i + 1, closingParenthesis), false);
             atom.connectTo(r.atoms[0], r.parentBondType);
@@ -54,14 +56,20 @@ const processGroup = (s: string, main: boolean): GroupProcessingResult => {
             const n = c === "%" ? readNumber(s, i + 1) : Number(c);
 
             if (cycles[n] != undefined) {
-                cycles[n].connectTo(atom)
-            } else cycles[n] = atom;
+                if (cycles[n].length < 3) throw new Error("Invalid cycle configuration: not enough atom")
+                for (const a of cycles[n]) a.cycle = cycles[n];
+                currentCycle = null;
+                cycles[n][0].connectTo(atom)
+            } else {
+                cycles[n] = [atom];
+                currentCycle = n;
+            }
 
             i += c === "%" ? n.toString().length : 0;
         } else if (c === "[") { // Reading non-organic atom
             const end = s.indexOf("]", i + 1);
             if (end === -1)
-                throw new Error("Error while parsing SMILES: Expected closing ] but none have been found");
+                throw new Error("Expected closing ] but none have been found");
             const element = s.substring(i + 1, end);
             let name = element.replace(/[^A-GI-Za-z]+/g, "");
             let [isotope, tailInfo] = s.split(/[A-GI-Za-z]+/);
@@ -71,12 +79,13 @@ const processGroup = (s: string, main: boolean): GroupProcessingResult => {
                 tailInfo = tailInfo.substring(1);
             }
 
-            if (tailInfo.indexOf("+") > 0 && tailInfo.indexOf("-") > 0) throw new Error("Error while parsing SMILES: Both a positive and negative charge are specified for non-normal atom");
+            if (tailInfo.indexOf("+") > 0 && tailInfo.indexOf("-") > 0)
+                throw new Error("Both a positive and negative charge are specified for non-normal atom");
 
             let hydrogen = null;
             const chStart = Math.max(tailInfo.indexOf("+"), tailInfo.indexOf("-"));
-            if (tailInfo.startsWith("H")) hydrogen = chStart === 1 ? 1 : Number(s.substring(1).replace(/[+-].+$)/, ""));
-            else if (tailInfo.indexOf("H") > 0) throw new Error("Error while parsing SMILES: Hydrogen at wrong position in non-normal atom");
+            if (tailInfo.startsWith("H")) hydrogen = chStart === 1 ? 1 : Number(s.substring(1).replace(/[+-].+$/, ""));
+            else if (tailInfo.indexOf("H") > 0) throw new Error("Hydrogen at wrong position in non-normal atom");
 
             const chargeInfo = tailInfo.substring(chStart);
             const q = chargeInfo[0] === "+" ? 1 : -1;
@@ -93,6 +102,8 @@ const processGroup = (s: string, main: boolean): GroupProcessingResult => {
             else parentBond = bondType;
             atoms.push(atom);
 
+            if (currentCycle !== null) cycles[currentCycle].push(atom);
+
             i += element.length + 1;
         } else if (STANDARD_ATOMS.includes(c)) {
             // Make the distinction between Bore and Brome, Carbon and Chlorine
@@ -108,12 +119,14 @@ const processGroup = (s: string, main: boolean): GroupProcessingResult => {
             else parentBond = bondType;
             atoms.push(atom);
 
+            if (currentCycle !== null) cycles[currentCycle].push(atom);
+
             i += name.length - 1;
         } else if (c === "=") bondType = "double";
         else if (c === "#") bondType = "triple";
     }
 
-    if (atoms.length === 0) throw new Error("Error while parsing SMILES: Empty group");
+    if (atoms.length === 0) throw new Error("Empty group");
 
     return {
         atoms: atoms,

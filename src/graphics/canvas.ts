@@ -2,7 +2,7 @@ import {Molecule} from "../objects/molecule";
 import {SimpleNode} from "../objects/nodes";
 import {Bond} from "../objects/bonds";
 import {Canvas as FabricCanvas, Line, FabricText} from "fabric";
-import {add, getNextPoint} from "./geometry";
+import {getNextPoint} from "./geometry";
 
 export interface SchemaOptions {
     geometry?: "flat" | "fischer" | "cram" | "haworth" | "newman",
@@ -22,37 +22,6 @@ const countHydrogen = (node: SimpleNode) => {
     return c;
 }
 
-const getBiggerCarbonChain = (bond: Bond | null, node: SimpleNode): {length: number, bond: Bond | null} => {
-    const _processNode = (oldBond: Bond, n: SimpleNode, depth: number) => {
-        if (n.atom !== "C") return depth;
-        depth++;
-        let max = depth;
-        for (let link of n.links) {
-            if (link !== oldBond) {
-                max = Math.max(max, _processNode(link, getOtherNode(link, n), depth));
-            }
-        }
-        return max;
-    }
-
-    let max = 0;
-    let b = null;
-    for (let link of node.links) {
-        if (link !== bond) {
-            const n = _processNode(link, getOtherNode(link, node), 0);
-            if (n > max) {
-                max = n;
-                b = link;
-            }
-        }
-    }
-
-    return {
-        length: max,
-        bond: b
-    };
-}
-
 export class Canvas {
     canvas: FabricCanvas;
 
@@ -61,8 +30,9 @@ export class Canvas {
     }
 
     private drawNode(node: SimpleNode, options: SchemaOptions, depth: number, onMainChain: boolean, bond: Bond | null) {
-        console.log("Tail call");
-        console.log({node, options, depth, onMainChain, bond});
+        if (node._treated) return;
+        console.log("Tail call", depth);
+        // console.log({node, options, depth, onMainChain, bond});
         const zero = {
             x: Math.round(this.canvas.width / 2),
             y: Math.round(this.canvas.height / 2)
@@ -86,8 +56,11 @@ export class Canvas {
             if (options.showHydrogenAtoms === "compact") s += "H" + countHydrogen(node)
 
             const text = new FabricText(s, {
-                left: zero.x + node._position.x,
-                top: zero.y + node._position.y
+                left: zero.x + node._position.x - 4,
+                top: zero.y + node._position.y - 8,
+                fontSize: 16,
+                textAlign: "center",
+                fontFamily: "sans-serif"
             });
 
             node._object = text;
@@ -117,7 +90,8 @@ export class Canvas {
                     const text = new FabricText(s, {
                         left: zero.x + node._position.x,
                         top: zero.y + node._position.y,
-                        fontSize: 16
+                        fontSize: 16,
+                        fontFamily: "sans-serif"
                     });
 
                     node._object = text;
@@ -127,14 +101,30 @@ export class Canvas {
             }
 
             // TODO: fully handle options
-            const angle = bond === null || bond._angle == undefined ? -120 : bond._angle * -1;
-            const bondSize = options.showCarbonAtoms === true || options.showCarbonAtoms === "full" ? 20 : 30;
-            let startPos = node._position;
-            if (options.showHydrogenAtoms === true || options.showHydrogenAtoms === "full")
-                startPos = add(startPos, getNextPoint({...node._position, angle: angle}, 5));
-            const otherPos = getNextPoint({...node._position, angle: angle}, 30);
-            const endPos = getNextPoint({...node._position, angle: angle}, bondSize);
-            console.log("start", startPos, "end", endPos);
+
+            // compute angle
+            let angle;
+            if (node.cycle) {
+                let absoluteAngle = 2 * Math.PI / node.cycle.length
+                if (bond === null || getOtherNode(bond, node).cycle === null) absoluteAngle /= -2;
+                console.log(absoluteAngle);
+                angle = (bond === null || bond._angle == undefined ? 0 : bond._angle) - absoluteAngle;
+            } else angle = bond === null || bond._angle == undefined ? Math.PI / 6 : bond._angle * -1;
+            console.log(angle);
+
+            let bondSize = 30;
+            let startOffset = 0;
+            if (node.atom !== "C" || (options.showCarbonAtoms === true || options.showCarbonAtoms === "full")){
+                bondSize -= 8;
+                startOffset = 8;
+            }
+            if (mainChainNext.next.atom !== "C" || (options.showCarbonAtoms === true
+                || options.showCarbonAtoms === "full")) bondSize -= 8;
+
+            let nodePos = node._position;
+            let startPos = getNextPoint({...nodePos, angle: angle}, startOffset);
+            const otherPos = getNextPoint({...nodePos, angle: angle}, 30);
+            const endPos = getNextPoint({...startPos, angle: angle}, bondSize);
             const bondLine = new Line([
                 zero.x + startPos.x,
                 zero.y + startPos.y,
@@ -153,8 +143,10 @@ export class Canvas {
             newBond._angle = angle;
 
             this.canvas.add(bondLine);
+            node._treated = true;
             this.drawNode(getOtherNode(mainChainNext.bond, node), options, depth + 1, true, newBond);
         }
+
         // groups
     }
 

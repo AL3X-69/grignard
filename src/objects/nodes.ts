@@ -6,8 +6,10 @@ export class SimpleNode {
     atom: string;
     charge: number = 0;
     main: boolean = false;
+    cycle: SimpleNode[] | null = null;
     _object: FabricText | undefined;
     _position: Coordinates | undefined;
+    _treated: boolean = false;
     private _links: Bond[] = [];
 
     constructor(atom: string) {
