@@ -4,20 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4b1d1cb7-54aa-46be-bf47-f8d7a0d6e370" name="Changes" comment="Started drawing implementation">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/.yarn/install-state.gz" beforeDir="false" afterPath="$PROJECT_DIR$/example/.yarn/install-state.gz" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/example/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/example/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/src/main.ts" beforeDir="false" afterPath="$PROJECT_DIR$/example/src/main.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/example/yarn.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/graphics/canvas.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphics/canvas.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/graphics/geometry.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphics/geometry.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/objects/nodes.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/objects/nodes.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/parsers/parsers.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/parsers/parsers.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/parsers/smiles.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/parsers/smiles.ts" afterDir="false" />
-    </list>
+    <list default="true" id="4b1d1cb7-54aa-46be-bf47-f8d7a0d6e370" name="Changes" comment="Drawing logic (simple carbon structure is now working)" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -119,7 +106,7 @@
       <workItem from="1728724645210" duration="91000" />
       <workItem from="1729521152799" duration="28000" />
       <workItem from="1730582355069" duration="10770000" />
-      <workItem from="1730937393490" duration="1344000" />
+      <workItem from="1730937393490" duration="1703000" />
     </task>
     <task id="LOCAL-00001" summary="Update gitignore for yarn">
       <option name="closed" value="true" />
@@ -137,7 +124,31 @@
       <option name="project" value="LOCAL" />
       <updated>1728724726166</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Changed the way example project import library">
+      <option name="closed" value="true" />
+      <created>1730939076413</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1730939076413</updated>
+    </task>
+    <task id="LOCAL-00004" summary="yarn cleanup">
+      <option name="closed" value="true" />
+      <created>1730939091231</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1730939091231</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Drawing logic (simple carbon structure is now working)">
+      <option name="closed" value="true" />
+      <created>1730939153649</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1730939153649</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -157,6 +168,9 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Update gitignore for yarn" />
     <MESSAGE value="Started drawing implementation" />
-    <option name="LAST_COMMIT_MESSAGE" value="Started drawing implementation" />
+    <MESSAGE value="Changed the way example project import library" />
+    <MESSAGE value="yarn cleanup" />
+    <MESSAGE value="Drawing logic (simple carbon structure is now working)" />
+    <option name="LAST_COMMIT_MESSAGE" value="Drawing logic (simple carbon structure is now working)" />
   </component>
 </project>
