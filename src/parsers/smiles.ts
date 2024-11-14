@@ -1,6 +1,7 @@
 import {Molecule} from "../objects/molecule";
 import {SimpleNode} from "../objects/nodes";
 import {BondType} from "../objects/bonds";
+import {getHydrogenCount} from "../chem/valence";
 
 const STANDARD_ATOMS = ["B", "C", "N", "O", "P", "S", "F", "Cl", "Br", "I"];
 
@@ -96,7 +97,7 @@ const processGroup = (s: string, main: boolean): GroupProcessingResult => {
             atom = new SimpleNode(name);
             atom.charge = charge;
             atom.main = main;
-            if (hydrogen) atom.addHydrogen(hydrogen);
+            if (hydrogen) atom.addHydrogens(hydrogen);
             if (_a !== null) _a.connectTo(atom, bondType);
             // TODO: save isotope
             else parentBond = bondType;
@@ -114,9 +115,11 @@ const processGroup = (s: string, main: boolean): GroupProcessingResult => {
             let _a = atom;
             atom = new SimpleNode(name);
             atom.main = main;
-            // TODO: auto hydrogen add (see SMILES reference)
             if (_a !== null) _a.connectTo(atom, bondType);
             else parentBond = bondType;
+
+            let hydrogenCount = getHydrogenCount(name, atom.links.length);
+            if (hydrogenCount !== null) atom.addHydrogens(hydrogenCount);
             atoms.push(atom);
 
             if (currentCycle !== null) cycles[currentCycle].push(atom);
