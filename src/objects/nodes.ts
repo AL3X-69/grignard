@@ -42,10 +42,14 @@ export class SimpleNode {
         node.addLink(link);
     }
 
-    addHydrogen(n: number) {
+    addHydrogens(n: number) {
         for (let i = 0; i < n; i++) {
             const hydrogen = new SimpleNode("H");
             this.connectTo(hydrogen);
         }
     }
+}
+
+export class CarbonNode extends SimpleNode {
+    atom = "C";
 }
