@@ -1,3 +1,5 @@
+import { path } from "d3";
+
 export interface Coordinates {
     x: number,
     y: number
@@ -21,3 +23,10 @@ export const add = (c1: Coordinates, c2: Coordinates): Coordinates => ({
     x: c1.x + c2.x,
     y: c1.y + c2.y
 });
+
+export const createLine = (start: Coordinates, end: Coordinates) => {
+    const p = path();
+    p.moveTo(start.x, start.y);
+    p.lineTo(end.x, end.y);
+    return p.toString();
+}

@@ -1,8 +1,8 @@
-import {Molecule} from "../objects/molecule";
-import {SimpleNode} from "../objects/nodes";
-import {Bond} from "../objects/bonds";
-import {Canvas as FabricCanvas, Line, FabricText} from "fabric";
-import {getNextPoint} from "./geometry";
+import { Molecule } from "../objects/molecule";
+import { SimpleNode } from "../objects/nodes";
+import { Bond } from "../objects/bonds";
+import { createLine, getNextPoint } from "./geometry";
+import { line, select, Selection } from "d3";
 
 export interface SchemaOptions {
     geometry?: "flat" | "fischer" | "cram" | "haworth" | "newman",
@@ -23,10 +23,10 @@ const countHydrogen = (node: SimpleNode) => {
 }
 
 export class Canvas {
-    canvas: FabricCanvas;
+    canvas: Selection<HTMLCanvasElement, unknown, null, undefined>;
 
     constructor(canvas: HTMLCanvasElement) {
-        this.canvas = new FabricCanvas(canvas);
+        this.canvas = select(canvas);
     }
 
     private drawNode(node: SimpleNode, options: SchemaOptions, depth: number, onMainChain: boolean, bond: Bond | null) {
@@ -34,8 +34,8 @@ export class Canvas {
         console.log("Tail call", depth);
         // console.log({node, options, depth, onMainChain, bond});
         const zero = {
-            x: Math.round(this.canvas.width / 2),
-            y: Math.round(this.canvas.height / 2)
+            x: Math.round(this.canvas.node()!.width / 2),
+            y: Math.round(this.canvas.node()!.height / 2)
         }
 
         // TODO: group detection
@@ -48,23 +48,22 @@ export class Canvas {
             || options.showHydrogenAtoms === "full"
         )) || !["H", "C"].includes(node.atom));
 
-        if (node._position == null) node._position = {x: 0, y: 0};
+        if (node._position == null) node._position = { x: 0, y: 0 };
 
         if (drawText) {
             let s = node.atom;
             // TODO: Hydrogen number as indice
-            if (options.showHydrogenAtoms === "compact") s += "H" + countHydrogen(node)
+            if (options.showHydrogenAtoms === "compact") s += "H" + countHydrogen(node);
 
-            const text = new FabricText(s, {
-                left: zero.x + node._position.x - 4,
-                top: zero.y + node._position.y - 8,
-                fontSize: 16,
-                textAlign: "center",
-                fontFamily: "sans-serif"
-            });
+            const text = this.canvas.append("text")
+                .attr("x", zero.x + node._position.x - 4)
+                .attr("y", zero.y + node._position.y - 8)
+                .attr("fontSize", 16)
+                .attr("textAlign", "center")
+                .attr("fontFamily", "sans-serif")
+                .text(s);
 
             node._object = text;
-            this.canvas.add(text);
         }
 
         // Bonds
@@ -85,17 +84,16 @@ export class Canvas {
                 if (depth === 0) { // If only one atom, draw it
                     let s = node.atom;
                     // TODO: Hydrogen number as indice
-                    if (options.showHydrogenAtoms === "compact") s += "H" + countHydrogen(node)
+                    if (options.showHydrogenAtoms === "compact") s += "H" + countHydrogen(node);
 
-                    const text = new FabricText(s, {
-                        left: zero.x + node._position.x,
-                        top: zero.y + node._position.y,
-                        fontSize: 16,
-                        fontFamily: "sans-serif"
-                    });
+                    const text = this.canvas.append("text")
+                        .attr("x", zero.x + node._position.x)
+                        .attr("y", zero.y + node._position.y)
+                        .attr("fontSize", 16)
+                        .attr("fontFamily", "sans-serif")
+                        .text(s);
 
                     node._object = text;
-                    this.canvas.add(text);
                 }
                 return;
             }
@@ -114,7 +112,7 @@ export class Canvas {
 
             let bondSize = 30;
             let startOffset = 0;
-            if (node.atom !== "C" || (options.showCarbonAtoms === true || options.showCarbonAtoms === "full")){
+            if (node.atom !== "C" || (options.showCarbonAtoms === true || options.showCarbonAtoms === "full")) {
                 bondSize -= 8;
                 startOffset = 8;
             }
@@ -122,27 +120,21 @@ export class Canvas {
                 || options.showCarbonAtoms === "full")) bondSize -= 8;
 
             let nodePos = node._position;
-            let startPos = getNextPoint({...nodePos, angle: angle}, startOffset);
-            const otherPos = getNextPoint({...nodePos, angle: angle}, 30);
-            const endPos = getNextPoint({...startPos, angle: angle}, bondSize);
-            const bondLine = new Line([
-                zero.x + startPos.x,
-                zero.y + startPos.y,
-                zero.x + endPos.x,
-                zero.y + endPos.y
-            ], {
-                hasControls: false,
-                selectable: false,
-                stroke: "#000000"
-            });
+            let startPos = getNextPoint({ ...nodePos, angle: angle }, startOffset);
+            const otherPos = getNextPoint({ ...nodePos, angle: angle }, 30);
+            const endPos = getNextPoint({ ...startPos, angle: angle }, bondSize);
+
+
+            const bondLine = createLine(startPos, endPos);
 
             mainChainNext.next._position = otherPos;
 
             const newBond = mainChainNext.bond;
-            newBond._object = bondLine;
+            newBond._object = this.canvas.append("path")
+            .attr("d", bondLine)
+            .attr("stroke", "black");
             newBond._angle = angle;
 
-            this.canvas.add(bondLine);
             node._treated = true;
             this.drawNode(getOtherNode(mainChainNext.bond, node), options, depth + 1, true, newBond);
         }
@@ -151,7 +143,7 @@ export class Canvas {
     }
 
     draw = (molecule: Molecule, options?: SchemaOptions) => {
-        this.canvas.clear();
+        this.canvas.select("*").remove();
         this.drawNode(molecule.atoms[0], options || {}, 0, true, null);
     }
 }
