@@ -4,7 +4,7 @@ const canvasEl = document.getElementById("main-canvas");
 const input = document.getElementById("smiles-input");
 const refreshButton = document.getElementById("refresh");
 
-if (canvasEl == null || !(canvasEl instanceof HTMLCanvasElement)) throw new Error("invalid canvas");
+if (canvasEl == null || !(canvasEl instanceof SVGSVGElement)) throw new Error("invalid canvas");
 if (input == null || !(input instanceof HTMLInputElement)) throw new Error("invalid input");
 if (refreshButton == null || !(refreshButton instanceof HTMLButtonElement)) throw new Error("invalid refreshButton");
 

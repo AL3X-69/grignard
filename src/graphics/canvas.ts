@@ -23,9 +23,9 @@ const countHydrogen = (node: SimpleNode) => {
 }
 
 export class Canvas {
-    canvas: Selection<HTMLCanvasElement, unknown, null, undefined>;
+    canvas: Selection<SVGSVGElement, unknown, null, undefined>;
 
-    constructor(canvas: HTMLCanvasElement) {
+    constructor(canvas: SVGSVGElement) {
         this.canvas = select(canvas);
     }
 
@@ -33,10 +33,14 @@ export class Canvas {
         if (node._treated) return;
         console.log("Tail call", depth);
         // console.log({node, options, depth, onMainChain, bond});
+        const bbox = this.canvas.node()!.getBoundingClientRect();
+
         const zero = {
-            x: Math.round(this.canvas.node()!.width / 2),
-            y: Math.round(this.canvas.node()!.height / 2)
-        }
+            x: Math.round(bbox.width / 2),
+            y: Math.round(bbox.height / 2)
+        };
+
+        console.log(zero);
 
         // TODO: group detection
         const drawText = ((node.atom === "C" && (
@@ -48,7 +52,7 @@ export class Canvas {
             || options.showHydrogenAtoms === "full"
         )) || !["H", "C"].includes(node.atom));
 
-        if (node._position == null) node._position = { x: 0, y: 0 };
+        if (node._position == null) node._position = zero;
 
         if (drawText) {
             let s = node.atom;
@@ -131,8 +135,8 @@ export class Canvas {
 
             const newBond = mainChainNext.bond;
             newBond._object = this.canvas.append("path")
-            .attr("d", bondLine)
-            .attr("stroke", "black");
+                    .attr("d", bondLine)
+                    .attr("stroke", "black");
             newBond._angle = angle;
 
             node._treated = true;
