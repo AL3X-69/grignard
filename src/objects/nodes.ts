@@ -1,14 +1,14 @@
 import {Bond, BondType, SimpleBond} from "./bonds";
-import {FabricText} from "fabric";
 import {Coordinates} from "../graphics/geometry";
+import {Selection} from "d3";
 
 export class SimpleNode {
     atom: string;
     charge: number = 0;
     main: boolean = false;
     cycle: SimpleNode[] | null = null;
-    _object: FabricText | undefined;
-    _position: Coordinates | undefined;
+    _object?: Selection<SVGTextElement, unknown, null, undefined>;
+    _position?: Coordinates;
     _treated: boolean = false;
     private _links: Bond[] = [];
 

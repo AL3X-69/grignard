@@ -7,8 +7,14 @@
   "repository": "https://github.com/AL3X-69/grignard",
   "author": "Alex6 <contact@alex6.dev>",
   "license": "MIT",
+  "scripts": {
+    "build": "tsc"
+  },
+  "files": [
+    "dist"
+  ],
   "devDependencies": {
-    "@types/d3": "^7",
+    "@types/d3": "^7.4.3",
     "typescript": "^5.3.3"
   },
   "dependencies": {

@@ -1,8 +1,8 @@
-import { Molecule } from "../objects/molecule";
-import { SimpleNode } from "../objects/nodes";
-import { Bond } from "../objects/bonds";
-import { createLine, getNextPoint } from "./geometry";
-import { line, select, Selection } from "d3";
+import {Molecule} from "../objects/molecule";
+import {SimpleNode} from "../objects/nodes";
+import {Bond} from "../objects/bonds";
+import {createLine, getNextPoint} from "./geometry";
+import {select, Selection} from "d3";
 
 export interface SchemaOptions {
     geometry?: "flat" | "fischer" | "cram" | "haworth" | "newman",
@@ -26,7 +26,7 @@ export class Canvas {
     canvas: Selection<SVGSVGElement, unknown, null, undefined>;
 
     constructor(canvas: SVGSVGElement) {
-        this.canvas = select(canvas);
+        this.canvas = select<SVGSVGElement, unknown>(canvas);
     }
 
     private drawNode(node: SimpleNode, options: SchemaOptions, depth: number, onMainChain: boolean, bond: Bond | null) {
@@ -52,22 +52,20 @@ export class Canvas {
             || options.showHydrogenAtoms === "full"
         )) || !["H", "C"].includes(node.atom));
 
-        if (node._position == null) node._position = zero;
+        if (node._position == undefined) node._position = zero;
 
         if (drawText) {
             let s = node.atom;
             // TODO: Hydrogen number as indice
             if (options.showHydrogenAtoms === "compact") s += "H" + countHydrogen(node);
 
-            const text = this.canvas.append("text")
+            node._object = this.canvas.append("text")
                 .attr("x", zero.x + node._position.x - 4)
                 .attr("y", zero.y + node._position.y - 8)
                 .attr("fontSize", 16)
-                .attr("textAlign", "center")
+                .attr("text-anchor", "center")
                 .attr("fontFamily", "sans-serif")
                 .text(s);
-
-            node._object = text;
         }
 
         // Bonds
@@ -90,14 +88,12 @@ export class Canvas {
                     // TODO: Hydrogen number as indice
                     if (options.showHydrogenAtoms === "compact") s += "H" + countHydrogen(node);
 
-                    const text = this.canvas.append("text")
+                    node._object = this.canvas.append("text")
                         .attr("x", zero.x + node._position.x)
                         .attr("y", zero.y + node._position.y)
                         .attr("fontSize", 16)
                         .attr("fontFamily", "sans-serif")
                         .text(s);
-
-                    node._object = text;
                 }
                 return;
             }

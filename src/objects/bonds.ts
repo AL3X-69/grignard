@@ -1,13 +1,13 @@
 import {SimpleNode} from "./nodes";
-import {Line} from "fabric/fabric-impl";
+import {Selection} from "d3";
 
 export type BondType = "simple" | "double" | "triple";
 
 export abstract class Bond {
     nodeA: SimpleNode;
     nodeB: SimpleNode;
-    _object: Line | undefined;
-    _angle: number | undefined;
+    _object?: Selection<SVGPathElement, unknown, null, undefined>;
+    _angle?: number;
 
     protected constructor(nodeA: SimpleNode, nodeB: SimpleNode) {
         this.nodeA = nodeA;
