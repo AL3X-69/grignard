@@ -12,7 +12,9 @@ const canvas = new Canvas(canvasEl);
 const parser = new SMILESParser();
 
 const refresh = () => {
-    canvas.draw(parser.parse(input.value));
+    canvas.draw(parser.parse(input.value), {
+        debug: true,
+    });
 }
 
 input.addEventListener("input", refresh);

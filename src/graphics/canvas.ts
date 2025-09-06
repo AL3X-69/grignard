@@ -8,7 +8,8 @@ export interface SchemaOptions {
     geometry?: "flat" | "fischer" | "cram" | "haworth" | "newman",
     showCarbonAtoms?: boolean | "none" | "groups" | "end" | "full",
     showHydrogenAtoms?: boolean | "none" | "groups" | "compact" | "full",
-    showLewisBonds?: boolean
+    showLewisBonds?: boolean,
+    debug?: boolean
 }
 
 const getOtherNode = (bond: Bond, node: SimpleNode) => bond.nodeA === node ? bond.nodeB : bond.nodeA;
@@ -60,11 +61,12 @@ export class Canvas {
             if (options.showHydrogenAtoms === "compact") s += "H" + countHydrogen(node);
 
             node._object = this.canvas.append("text")
-                .attr("x", zero.x + node._position.x - 4)
-                .attr("y", zero.y + node._position.y - 8)
-                .attr("fontSize", 16)
-                .attr("text-anchor", "center")
-                .attr("fontFamily", "sans-serif")
+                .attr("x", node._position.x)
+                .attr("y", node._position.y)
+                .attr("font-size", 16)
+                .attr("text-anchor", "middle")
+                .attr("dominant-baseline", "middle")
+                .attr("font-family", "sans-serif")
                 .text(s);
         }
 
@@ -89,10 +91,12 @@ export class Canvas {
                     if (options.showHydrogenAtoms === "compact") s += "H" + countHydrogen(node);
 
                     node._object = this.canvas.append("text")
-                        .attr("x", zero.x + node._position.x)
-                        .attr("y", zero.y + node._position.y)
-                        .attr("fontSize", 16)
-                        .attr("fontFamily", "sans-serif")
+                        .attr("x", node._position.x)
+                        .attr("y", node._position.y)
+                        .attr("font-size", 16)
+                        .attr("text-anchor", "middle")
+                        .attr("dominant-baseline", "middle")
+                        .attr("font-family", "sans-serif")
                         .text(s);
                 }
                 return;
@@ -120,19 +124,24 @@ export class Canvas {
                 || options.showCarbonAtoms === "full")) bondSize -= 8;
 
             let nodePos = node._position;
-            let startPos = getNextPoint({ ...nodePos, angle: angle }, startOffset);
-            const otherPos = getNextPoint({ ...nodePos, angle: angle }, 30);
-            const endPos = getNextPoint({ ...startPos, angle: angle }, bondSize);
-
+            let startPos = getNextPoint({...nodePos, angle: angle}, startOffset);
+            const otherPos = getNextPoint({...nodePos, angle: angle}, 30);
+            const endPos = getNextPoint({...startPos, angle: angle}, bondSize);
 
             const bondLine = createLine(startPos, endPos);
+
+            if (options.debug) this.canvas.append("circle")
+                .attr("cx", otherPos.x)
+                .attr("cy", otherPos.y)
+                .attr("r", 3)
+                .attr("fill", "red");
 
             mainChainNext.next._position = otherPos;
 
             const newBond = mainChainNext.bond;
             newBond._object = this.canvas.append("path")
-                    .attr("d", bondLine)
-                    .attr("stroke", "black");
+                .attr("d", bondLine)
+                .attr("stroke", "black");
             newBond._angle = angle;
 
             node._treated = true;
