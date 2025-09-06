@@ -1,4 +1,4 @@
-import {SMILESParser, Canvas} from "../../src";
+import {Canvas, SMILESParser} from "grignard";
 
 const canvasEl = document.getElementById("main-canvas");
 const input = document.getElementById("smiles-input");
